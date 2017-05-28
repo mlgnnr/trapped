@@ -9,5 +9,5 @@ class Road (models.Model):
     last_update = models.DateTimeField('Last Update')
 
     def __str__(self):
-        return self.Road.name
+        return self.name
 # Create your models here.
