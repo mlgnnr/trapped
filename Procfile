@@ -1,2 +1,2 @@
 web: gunicorn first.wsgi
-clock: python clock.py
+clock: python manage.py getdata
