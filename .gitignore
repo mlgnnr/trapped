@@ -2,4 +2,4 @@ venv
 *.pyc
 staticfiles
 .env
-local_settings.py
+/first/local_settings.py
