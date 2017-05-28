@@ -1,2 +1,2 @@
 web: gunicorn first.wsgi
-clock: python manage.py getdata
+clock: python clock.py --loglevel=INFO
