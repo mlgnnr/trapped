@@ -75,16 +75,9 @@ WSGI_APPLICATION = 'first.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgresql-corrugated-95268',
-	'USER': 'zevyfvrrxtjyke',
-	'PASSWORD': '0f378b433c1dfe9118258af64efd90908d813a7e4a0067b71e4263c609781d14',
-	'HOST': 'ec2-54-235-120-39.compute-1.amazonaws.com',
-	'PORT': '5432',
-    }
-}
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
 
 
 # Password validation
