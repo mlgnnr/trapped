@@ -8,4 +8,6 @@ class Road (models.Model):
     condition = models.CharField(max_length=50)
     last_update = models.DateTimeField('Last Update')
 
+    def __str__(self):
+        return self.Road.name
 # Create your models here.
