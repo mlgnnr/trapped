@@ -1,6 +1,57 @@
-{% if road %}
-	<h1>{{% road.name %}}<h1>
-	<h2>{{% road.conditon%}}
-{% else %}
-	<h1>Trouble in paradise</h1>
-{% endif %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Heiðin</title>
+
+    <!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+	<div id="exTab2" class="container">	
+		<h3> </h3>
+		<ul class="nav nav-tabs">
+			<li class="active">
+        <a  href="#1" data-toggle="tab">{{ road.name }}</a>
+			</li>
+<!--		<li><a href="#2" data-toggle="tab">Þrengsli</a>
+			</li>
+			<li><a href="#3" data-toggle="tab">Sandskeið</a>
+			</li> -->
+		</ul>
+
+			<div class="tab-content ">
+			  <div class="tab-pane active" id="1">
+          <h3>{{ road.condition }}</h3>
+          <h4>Uppfært: {{ update_time }}</h4>
+				</div>
+				<div class="tab-pane" id="2">
+          <h3>Notice the gap between the content and tab after applying a background color</h3>
+				</div>
+        <div class="tab-pane" id="3">
+          <h3>add clearfix to tab-content (see the css)</h3>
+				</div>
+			</div>
+  </div>
+
+  <hr></hr>
+	  <div class="footer navbar-bottom">
+	  	<div class="col-lg-12 text-center">
+		  <p><i>Byggt á gögnum frá Vegagerðinni.</i></p>						
+	  	</div>
+	  </div>
+	    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	    <!-- Include all compiled plugins (below), or include individual files as needed -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  </body>
+</html>

@@ -29,9 +29,9 @@ class Api():
 
     def updateRoadObject(new_road_status):
         road = Road.objects.get(pk=1)
-        print(road.condition)
+        print("Old: " + road.condition)
         # Add notications if CHANGE
         road.condition = new_road_status['StuttAstand']
         road.last_update = timezone.now()
-        print(road.condition)
         road.save()
+        print("New: " + road.condition)
