@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, get_list_or_404
 from .models import Road
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def home(request):
@@ -17,9 +20,14 @@ def home(request):
 
 
 def index(request):
-    road = get_object_or_404(Road, pk=1)
-    update_time = road.last_update.strftime('%H:%M - %d/%m/%y')
-    context = {'update_time': update_time, 'road': road}
+    road_list = []
+    road_list.append(get_object_or_404(Road, pk=1))
+    road_list.append(get_object_or_404(Road, pk=2))
+    road_list.append(get_object_or_404(Road, pk=3))
+
+    update_time = road_list[2].last_update.strftime('%H:%M - %d/%m/%y')
+    # logger.warning(road_list.sort())
+    context = {'update_time': update_time, 'road_list': road_list}
     return render(request, 'cond/index.html', context)
 
 

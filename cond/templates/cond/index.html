@@ -43,32 +43,20 @@
                   </div>
                   <div class="x_content">
 
-                    <table class="table">
+                    <table class="table table-striped">
                       <thead>
                         <tr>
-                          <th>#</th>
                           <th>Vegbútur</th>
                           <th>Ástand</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <th scope="row"></th>
-                          <td>{{ road.name }}</td>
+                      {% for road in road_list %}
+					    <tr>
+                          <td>{{ road.name}}</td>
                           <td>{{ road.condition }}</td>
-                        </tr>
-                        <tr>
-                          <th scope="row"></th>
-                          <td>Væntanlegt</td>
-                          <td></td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <th scope="row"></th>
-                          <td>Væntanlegt</td>
-                          <td></td>
-                          <td></td>
-                        </tr>
+					    </tr>
+					  {% endfor %}
                       </tbody>
                     <p><i>Uppfært: {{ update_time }}</i></p>
                     </table>
