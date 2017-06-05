@@ -12,3 +12,4 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         Api.getRoads()
+        Api.getCurrentWeather()

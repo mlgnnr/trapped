@@ -23,6 +23,8 @@
     
     <!-- Custom Theme Style -->
     <link href="/static/build/css/custom.min.css" rel="stylesheet">
+    <link href="/static/build/css/custom.css" rel="stylesheet">
+
   </head>
 
   <body>
@@ -35,7 +37,7 @@
         <div class="right_col" role="main">
             <br />
             <div class="row">
-              <div class="col-md-4 col-sm-6 col-xs-12">
+              <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title collapse-link">
                     <h2>Færð<small>yfirlit</small></h2>
@@ -48,13 +50,21 @@
                         <tr>
                           <th>Vegbútur</th>
                           <th>Ástand</th>
+                          <th class="text-right">Síðustu 5 klst</th> 
                         </tr>
                       </thead>
                       <tbody>
                       {% for road in road_list %}
 					    <tr>
                           <td>{{ road.name}}</td>
-                          <td>{{ road.condition }}</td>
+                          <td><i class="fa fa-square green falinn-xs"></i> {{ road.condition }}</td>
+                          <td class="text-right falinn-xs">
+                          	<i class="fa fa-square green":></i>
+                          	<i class="fa fa-square green"></i>
+                          	<i class="fa fa-square red"></i>
+                          	<i class="fa fa-square yellow"></i>
+                          	<i class="fa fa-square red"></i>
+                          </td>
 					    </tr>
 					  {% endfor %}
                       </tbody>
@@ -65,111 +75,28 @@
               </div>
 
               <!-- start of weather widget -->
-              <div class="col-md-4 col-sm-6 col-xs-12">
+              <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title collapse-link">
-                    <h2>Veður <small>væntanlegt</small></h2>
+                    <h2>Veðurstöðvar <small></small></h2>
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                    <div class="row">
-                      <div class="col-sm-12">
-                        <div class="temperature"><b>Mánudagur</b>, 07:30
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-sm-4">
-                        <div class="weather-icon">
-                          <span>
-                                              <canvas height="84" width="84" id="partly-cloudy-day"></canvas>
-                                          </span>
-
-                        </div>
-                      </div>
-                      <div class="col-sm-8">
-                        <div class="weather-text">
-                          <h2><b>Virkni væntanleg</b>
-                                              <br><i>Skýjað með köflum í dag</i>
-                                          </h2>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-12">
-                      <div class="weather-text pull-right">
-                        <h3 class="degrees">23</h3>
-                      </div>
-                    </div>
-                    <div class="clearfix"></div>
-
-
-                    <div class="row weather-days">
-                      <div class="col-sm-2">
-                        <div class="daily-weather">
-                          <h2 class="day">Mán</h2>
-                          <h3 class="degrees">25</h3>
-                          <span>
-                                                  <canvas id="clear-day" width="32" height="32">
-                                                  </canvas>
-
-                                          </span>
-                          <h5>15
-                                              <i>m/s</i>
-                                          </h5>
-                        </div>
-                      </div>
-                      <div class="col-sm-2">
-                        <div class="daily-weather">
-                          <h2 class="day">Þri</h2>
-                          <h3 class="degrees">25</h3>
-                          <canvas height="32" width="32" id="rain"></canvas>
-                          <h5>12
-                                              <i>m/s</i>
-                                          </h5>
-                        </div>
-                      </div>
-                      <div class="col-sm-2">
-                        <div class="daily-weather">
-                          <h2 class="day">Mið</h2>
-                          <h3 class="degrees">27</h3>
-                          <canvas height="32" width="32" id="snow"></canvas>
-                          <h5>14
-                                              <i>m/s</i>
-                                          </h5>
-                        </div>
-                      </div>
-                      <div class="col-sm-2">
-                        <div class="daily-weather">
-                          <h2 class="day">Fim</h2>
-                          <h3 class="degrees">28</h3>
-                          <canvas height="32" width="32" id="sleet"></canvas>
-                          <h5>15
-                                              <i>m/s</i>
-                                          </h5>
-                        </div>
-                      </div>
-                      <div class="col-sm-2">
-                        <div class="daily-weather">
-                          <h2 class="day">Fös</h2>
-                          <h3 class="degrees">28</h3>
-                          <canvas height="32" width="32" id="wind"></canvas>
-                          <h5>11
-                                              <i>m/s</i>
-                                          </h5>
-                        </div>
-                      </div>
-                      <div class="col-sm-2">
-                        <div class="daily-weather">
-                          <h2 class="day">Lau</h2>
-                          <h3 class="degrees">26</h3>
-                          <canvas height="32" width="32" id="cloudy"></canvas>
-                          <h5>10
-                                              <i>m/s</i>
-                                          </h5>
-                        </div>
-                      </div>
-                      <div class="clearfix"></div>
-                    </div>
+                        <ul class="list-unstyled top_profiles scroll-view">
+	                     {% for station in weatherstation_list %}                        
+                          <li class="media event">
+                            <a class="pull-left border-aero profile_thumb">
+                              <i class="fa fa-user aero"></i>
+                            </a>
+                            <div class="media-body">
+                              <a class="title" href="#">{{ station.name }}</a>
+                              <p>{{ station.temp }}° </p>
+                              <p>{{ station.wind }} m/s {{ station.wind_direction }}
+                              </p>
+                            </div>
+                          </li>
+                         {% endfor %}
+                        </ul>
                   </div>
                 </div>
 

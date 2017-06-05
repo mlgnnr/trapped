@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, get_list_or_404
-from .models import Road
+from .models import Road, WeatherStation
 import logging
 
 logger = logging.getLogger(__name__)
@@ -21,13 +21,20 @@ def home(request):
 
 def index(request):
     road_list = []
+    weather_station_list = []
+
     road_list.append(get_object_or_404(Road, pk=1))
     road_list.append(get_object_or_404(Road, pk=2))
     road_list.append(get_object_or_404(Road, pk=3))
 
+    weather_station_list.append(get_object_or_404(WeatherStation, pk=1))
+    weather_station_list.append(get_object_or_404(WeatherStation, pk=2))
+    weather_station_list.append(get_object_or_404(WeatherStation, pk=3))
+
     update_time = road_list[2].last_update.strftime('%H:%M - %d/%m/%y')
     # logger.warning(road_list.sort())
-    context = {'update_time': update_time, 'road_list': road_list}
+    context = {'update_time': update_time, 'road_list': road_list,
+               'weatherstation_list': weather_station_list}
     return render(request, 'cond/index.html', context)
 
 

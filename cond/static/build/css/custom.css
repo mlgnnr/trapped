@@ -5,6 +5,11 @@ html , body{
  
 }
  
+@media (max-width: 326px) {
+  .falinn-xs {
+    display: none !important;
+  }
+}
 .full-width {
 	
  width:100%;
@@ -13,7 +18,7 @@ html , body{
  
 .full-height{
  height:100%;
- }
+ } 
 
 .daterangepicker .ranges li {
     color: #73879C
