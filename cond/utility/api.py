@@ -14,11 +14,20 @@ class Api():
     station_id_dir = {'sandskeid_id': 17, 'hellisheidi_id': 1,
                       'threngslin_id': 31}
 
+    webcam_id_dir = {'sandskeid_id': 7080, 'hellisheidi_id': 7001,
+                     'threngslin_id': 31}
+
+    hellisheidi_img = "http://www.vegagerdin.is/vgdata/vefmyndavelar/hellisheidi_3.jpg"
+    threngslin_img = "http://www.vegagerdin.is/vgdata/vefmyndavelar/threngsli_1.jpg"
+    sandskeid_img = "http://www.vegagerdin.is/vgdata/vefmyndavelar/sandskeid_1.jpg"
+
     def makeRequest(type):
         if(type == "roads"):
             r = requests.get('http://gagnaveita.vegagerdin.is/api/faerd2014_1')
         elif(type == "weather"):
             r = requests.get('http://gagnaveita.vegagerdin.is/api/vedur2014_1')
+        elif(type == "webcam"):
+            r = requests.get('http://gagnaveita.vegagerdin.is/api/vefmyndavelar2014_1')
         return r
 
     def getRoads():
@@ -34,6 +43,18 @@ class Api():
             Api.parseWeatherStation(r.json())
         else:
             print("Error retrieving Weather from website")
+
+    def getWebcams():
+        r = Api.makeRequest("webcam")
+        if(r.status_code == 200):
+            Api.parseWebcam(r.json())
+        else:
+            print("Error retrieving Webcam from website")
+
+    def parseWebcam(response):
+        for station in response:
+            for station_id in Api.webcam_id_dir.values():
+                Api.searchWebcamStation(station, station_id)
 
     def parseWeatherStation(response):
         for station in response:
@@ -54,6 +75,11 @@ class Api():
         if station['Nr'] == station_id:
             print(station['Nafn'])
             Api.updateWeatherStationObject(station, station_id)
+
+    def searchWebcamStation(station, station_id):
+        if station['Maelist_nr'] == station_id:
+            print(station['Maelist_nr'])
+
 
     def updateRoadObject(new_road, road_id):
         if road_id == Api.road_id_dir['hellisheidi_id']:

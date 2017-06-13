@@ -40,17 +40,16 @@
               <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title collapse-link">
-                    <h2>Færð<small>yfirlit</small></h2>
+                    <h2>Færð<small>{{update_time}}</small></h2>
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-
                     <table class="table table-striped">
                       <thead>
                         <tr>
                           <th>Vegbútur</th>
                           <th>Ástand</th>
-                          <th class="text-right">Síðustu 5 klst</th> 
+                          <th class="text-right falinn-xs">Síðustu 5 klst</th> 
                         </tr>
                       </thead>
                       <tbody>
@@ -75,24 +74,36 @@
               </div>
 
               <!-- start of weather widget -->
-              <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+              <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title collapse-link">
                     <h2>Veðurstöðvar <small></small></h2>
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                        <ul class="list-unstyled top_profiles scroll-view">
+                        <ul class="list-unstyled">
 	                     {% for station in weatherstation_list %}                        
                           <li class="media event">
-                            <a class="pull-left border-aero profile_thumb">
-                              <i class="fa fa-user aero"></i>
-                            </a>
-                            <div class="media-body">
+                              <div class="media-body">
+
                               <a class="title" href="#">{{ station.name }}</a>
                               <p>{{ station.temp }}° </p>
                               <p>{{ station.wind }} m/s {{ station.wind_direction }}
                               </p>
+                            </div>
+                            <div class="media-body">
+                              <p>Greiðfært</p>
+                              <p>ss</p>
+                              <p>
+	                            <i class="fa fa-square green":></i>
+	                          	<i class="fa fa-square green"></i>
+	                          	<i class="fa fa-square red"></i>
+	                          	<i class="fa fa-square yellow"></i>
+	                          	<i class="fa fa-square red"></i>
+                              </p>
+                            </div>
+                            <div class="media-body">
+                              <img src="http://www.vegagerdin.is/vgdata/vefmyndavelar/hellisheidi_1.jpg" alt="" class="img-responsive">
                             </div>
                           </li>
                          {% endfor %}
