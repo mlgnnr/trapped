@@ -58,11 +58,9 @@
                           <td>{{ road.name}}</td>
                           <td><i class="fa fa-square green falinn-xs"></i> {{ road.condition }}</td>
                           <td class="text-right falinn-xs">
-                          	<i class="fa fa-square green":></i>
-                          	<i class="fa fa-square green"></i>
-                          	<i class="fa fa-square red"></i>
-                          	<i class="fa fa-square yellow"></i>
-                          	<i class="fa fa-square red"></i>
+                          {% for status in road.roadcondition_set.all %}
+                          	<i class="fa fa-square green" data-toggle="tooltip" data-placement="top" title="22:00 Greiðfært"></i>
+                          {% endfor %}
                           </td>
 					    </tr>
 					  {% endfor %}
@@ -74,7 +72,7 @@
               </div>
 
               <!-- start of weather widget -->
-              <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+              <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title collapse-link">
                     <h2>Veðurstöðvar <small></small></h2>
@@ -93,7 +91,7 @@
                             </div>
                             <div class="media-body">
                               <p>Greiðfært</p>
-                              <p>ss</p>
+                              <p>Allur akstur bannaður</p>
                               <p>
 	                            <i class="fa fa-square green":></i>
 	                          	<i class="fa fa-square green"></i>
@@ -102,7 +100,7 @@
 	                          	<i class="fa fa-square red"></i>
                               </p>
                             </div>
-                            <div class="media-body">
+                            <div class="media-body" data-toggle="modal" data-target=".bs-example-modal-lg">
                               <img src="http://www.vegagerdin.is/vgdata/vefmyndavelar/hellisheidi_1.jpg" alt="" class="img-responsive">
                             </div>
                           </li>
@@ -112,6 +110,15 @@
                 </div>
 
               </div>
+            <!-- Large modal -->
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+    	<img src="http://www.vegagerdin.is/vgdata/vefmyndavelar/hellisheidi_1.jpg" alt="" class="img-responsive">
+    </div>
+  </div>
+</div>
               <!-- end of weather widget -->
             </div>
           </div>

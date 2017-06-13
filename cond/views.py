@@ -32,7 +32,8 @@ def index(request):
     weather_station_list.append(get_object_or_404(WeatherStation, pk=3))
 
     update_time = road_list[2].last_update.strftime('%H:%M - %d/%m/%y')
-    # logger.warning(road_list.sort())
+    logger.warning(road_list[2].last_update.strftime("%M"))
+
     context = {'update_time': update_time, 'road_list': road_list,
                'weatherstation_list': weather_station_list}
     return render(request, 'cond/index.html', context)
