@@ -34,10 +34,9 @@
         <!-- /top navigation -->
 
         <!-- page content -->
-        <div class="right_col" role="main">
-            <br />
-            <div class="row">
-              <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+        <div class="right_col">
+			</br>    	
+              <div class="col-lg-3 col-lg-offset-3 col-md-4 col-md-offset-2 col-sm-6 col-xs-12 ">
                 <div class="x_panel">
                   <div class="x_title collapse-link">
                     <h2>Færð<small>{{update_time}}</small></h2>
@@ -113,11 +112,47 @@
             <!-- Large modal -->
 
 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog modal-md">
     <div class="modal-content">
-    	<img src="http://www.vegagerdin.is/vgdata/vefmyndavelar/hellisheidi_1.jpg" alt="" class="img-responsive">
+  <div class="container">
+  <div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#myCarousel" data-slide-to="1"></li>
+      <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+      <div class="item active">
+        <img src="http://www.vegagerdin.is/vgdata/vefmyndavelar/hellisheidi_1.jpg" alt="Los Angeles" style="width:100%;">
+      </div>
+
+      <div class="item">
+        <img src="http://www.vegagerdin.is/vgdata/vefmyndavelar/hellisheidi_2.jpg" alt="Chicago" style="width:100%;">
+      </div>
+    
+      <div class="item">
+        <img src="http://www.vegagerdin.is/vgdata/vefmyndavelar/hellisheidi_3.jpg" alt="New york" style="width:100%;">
+      </div>
+    </div>
+
+    <!-- Left and right controls -->
+  <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="right carousel-control" href="#myCarousel" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+    <span class="sr-only">Next</span>
+  </a>
+  </div>
+</div>
+{#     	<img src="http://www.vegagerdin.is/vgdata/vefmyndavelar/hellisheidi_1.jpg" alt="" class="img-responsive"> #}
     </div>
   </div>
+
 </div>
               <!-- end of weather widget -->
             </div>
