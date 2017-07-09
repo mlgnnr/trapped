@@ -76,8 +76,13 @@ WSGI_APPLICATION = 'first.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "mlgnnr",
+        "USER": "mlgnnr",
+        "PASSWORD": "",
+        "HOST": "localhost",
+        "PORT": "5432",
     }
 }
 
@@ -133,6 +138,6 @@ STATICFILES_DIRS = (
 )
 
 try:
-    from .local_settings import *
+    from local_settings import *
 except ImportError:
     pass
