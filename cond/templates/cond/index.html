@@ -20,7 +20,7 @@
     <link href="/static/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
     <!-- bootstrap-daterangepicker -->
     <link href="/static/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
-    
+
     <!-- Custom Theme Style -->
     <link href="/static/build/css/custom.min.css" rel="stylesheet">
     <link href="/static/build/css/custom.css" rel="stylesheet">
@@ -35,7 +35,7 @@
 
         <!-- page content -->
         <div class="right_col">
-			</br>    	
+			</br>
               <div class="col-lg-3 col-lg-offset-3 col-md-4 col-md-offset-2 col-sm-6 col-xs-12 ">
                 <div class="x_panel">
                   <div class="x_title collapse-link">
@@ -48,67 +48,26 @@
                         <tr>
                           <th>Vegbútur</th>
                           <th>Ástand</th>
-                          <th class="text-right falinn-xs">Síðustu 5 klst</th> 
+                          <th class="text-right falinn-xs">Síðustu 5 klst</th>
                         </tr>
                       </thead>
                       <tbody>
                       {% for road in road_list %}
-					    <tr>
+					            <tr>
                           <td>{{ road.name}}</td>
                           <td><i class="fa fa-square green falinn-xs"></i> {{ road.condition }}</td>
                           <td class="text-right falinn-xs">
-                          {% for status in road.roadcondition_set.all %}
-                          	<i class="fa fa-square green" data-toggle="tooltip" data-placement="top" title="22:00 Greiðfært"></i>
-                          {% endfor %}
                           </td>
-					    </tr>
-					  {% endfor %}
+					           </tr>
+					           {% endfor %}
                       </tbody>
-                    <p><i>Uppfært: {{ update_time }}</i></p>
+                    <p><i>Uppfært:</i></p>
                     </table>
                   </div>
                 </div>
               </div>
 
               <!-- start of weather widget -->
-              <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title collapse-link">
-                    <h2>Veðurstöðvar <small></small></h2>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                        <ul class="list-unstyled">
-	                     {% for station in weatherstation_list %}                        
-                          <li class="media event">
-                              <div class="media-body">
-
-                              <a class="title" href="#">{{ station.name }}</a>
-                              <p>{{ station.temp }}° </p>
-                              <p>{{ station.wind }} m/s {{ station.wind_direction }}
-                              </p>
-                            </div>
-                            <div class="media-body">
-                              <p>Greiðfært</p>
-                              <p>Allur akstur bannaður</p>
-                              <p>
-	                            <i class="fa fa-square green":></i>
-	                          	<i class="fa fa-square green"></i>
-	                          	<i class="fa fa-square red"></i>
-	                          	<i class="fa fa-square yellow"></i>
-	                          	<i class="fa fa-square red"></i>
-                              </p>
-                            </div>
-                            <div class="media-body" data-toggle="modal" data-target=".bs-example-modal-lg">
-                              <img src="http://www.vegagerdin.is/vgdata/vefmyndavelar/hellisheidi_1.jpg" alt="" class="img-responsive">
-                            </div>
-                          </li>
-                         {% endfor %}
-                        </ul>
-                  </div>
-                </div>
-
-              </div>
             <!-- Large modal -->
 
 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
@@ -132,7 +91,7 @@
       <div class="item">
         <img src="http://www.vegagerdin.is/vgdata/vefmyndavelar/hellisheidi_2.jpg" alt="Chicago" style="width:100%;">
       </div>
-    
+
       <div class="item">
         <img src="http://www.vegagerdin.is/vgdata/vefmyndavelar/hellisheidi_3.jpg" alt="New york" style="width:100%;">
       </div>

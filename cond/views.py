@@ -21,21 +21,9 @@ def home(request):
 
 def index(request):
     road_list = []
-    weather_station_list = []
+    road_list.append(get_object_or_404(Road, name="Hellisheiði"))
 
-    road_list.append(get_object_or_404(Road, pk=1))
-    road_list.append(get_object_or_404(Road, pk=2))
-    road_list.append(get_object_or_404(Road, pk=3))
-
-    weather_station_list.append(get_object_or_404(WeatherStation, pk=1))
-    weather_station_list.append(get_object_or_404(WeatherStation, pk=2))
-    weather_station_list.append(get_object_or_404(WeatherStation, pk=3))
-
-    update_time = road_list[2].last_update.strftime('%H:%M - %d/%m/%y')
-    logger.warning(road_list[2].last_update.strftime("%M"))
-
-    context = {'update_time': update_time, 'road_list': road_list,
-               'weatherstation_list': weather_station_list}
+    context = {'road_list': road_list,}
     return render(request, 'cond/index.html', context)
 
 
