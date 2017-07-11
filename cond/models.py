@@ -12,15 +12,18 @@ class Road (models.Model):
         return self.name
 
 class Condition (models.Model):
-    road = models.OneToOneField(Road,on_delete=models.CASCADE,primary_key=True)
+    road = models.OneToOneField(Road,on_delete=models.CASCADE)
     status = models.CharField(blank=True, max_length=70)
     sign = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
-        return self.road + self.status
+        return self.road.name
 
 class Weather (models.Model):
     road = models.OneToOneField(Road,on_delete=models.CASCADE,primary_key=True)
+
+    def __str__(self):
+        return self.road.name
 
 class WeatherStation (models.Model):
     road = models.OneToOneField(Weather,on_delete=models.CASCADE,primary_key=True)
@@ -46,11 +49,13 @@ class WeatherForecast (models.Model):
     sky = models.CharField(blank=True, max_length=100)
 
     def __str__(self):
-        return self.name + self.weather
+        return self.name
 
 class Image (models.Model):
     road = models.ForeignKey(Road)
     url = models.CharField(max_length=200)
     image_id = models.SmallIntegerField(blank=True, null=True)
 
+    def __str__(self):
+        return self.road.name + '_' + str(self.image_id)
 # Create your models here.
