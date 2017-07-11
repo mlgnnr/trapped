@@ -10,3 +10,6 @@
 | Sandskeið |   X    |   -  | 31488
 
 #### - Requests
+
+Forecast:
+http://xmlweather.vedur.is/?op_w=xml&type=forec&lang=is&view=xml&ids=31392
