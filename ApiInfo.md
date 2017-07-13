@@ -7,7 +7,7 @@
 | ------------- |:-------------:| :-----:| ----- |
 | Hellisheiði     | X | X | 31392
 | Þrengsli      | X      |   X | 31387
-| Sandskeið |   X    |   -  | 31488
+| Sandskeið |   -    |   X  | 31488
 
 #### - Requests
 

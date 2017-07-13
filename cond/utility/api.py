@@ -1,6 +1,11 @@
 import requests
+import csv
+import codecs
+from datetime import datetime
+import xml.etree.ElementTree as etree
 from cond.models import Road, WeatherStation
 from django.utils import timezone
+from cond.utility.date import DateUtility
 import logging
 
 logger = logging.getLogger(__name__)
@@ -16,6 +21,8 @@ class Api():
 
     webcam_id_dir = {'sandskeid_id': 7080, 'hellisheidi_id': 7001,
                      'threngslin_id': 31}
+    forecast_id_dir = {'hellisheidi_id': 31392,
+                     'threngslin_id': 31387}
 
     hellisheidi_img = "http://www.vegagerdin.is/vgdata/vefmyndavelar/hellisheidi_3.jpg"
     threngslin_img = "http://www.vegagerdin.is/vgdata/vefmyndavelar/threngsli_1.jpg"
@@ -26,8 +33,8 @@ class Api():
             r = requests.get('http://gagnaveita.vegagerdin.is/api/faerd2014_1')
         elif(type == "weather"):
             r = requests.get('http://gagnaveita.vegagerdin.is/api/vedur2014_1')
-        elif(type == "webcam"):
-            r = requests.get('http://gagnaveita.vegagerdin.is/api/vefmyndavelar2014_1')
+        elif(type == "forecast"):
+            r = requests.get('http://xmlweather.vedur.is/?op_w=xml&type=forec&lang=is&view=csv&ids=31392')
         return r
 
     def getRoads():
@@ -43,6 +50,32 @@ class Api():
             Api.parseWeatherStation(r.json())
         else:
             print("Error retrieving Weather from website")
+
+    def getForecast():
+        r = Api.makeRequest("forecast")
+
+        if(r.status_code == 200):
+            Api.parseForecast(r)
+        else:
+            print("Errror retrieving Forecast")
+##TODOOO
+    def parseForecast(response):
+        csvfile = response.iter_lines()
+        response_dict = csv.DictReader(codecs.iterdecode(csvfile, 'utf-8'))
+        Api.searchForecast(response_dict, 24)
+
+    def searchForecast(forecasts, number_of_hours):
+        for forecast in forecasts:
+            datetime_object = DateUtility.makeDateObject(forecast['Spátími'])
+            if (DateUtility.getDay(datetime_object) == DateUtility.getCurrentDay()):
+                print('correct day')
+            # date = forecast['Spátími']
+            # 2017-07-13 00:00:00
+
+            # print(DateUtility.getCurrentHour())
+            # print(datetime.now().strftime('%H'))
+            # print(datetime_object.strftime('%H'))
+
 
     def getWebcams():
         r = Api.makeRequest("webcam")
