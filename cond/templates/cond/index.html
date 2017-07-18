@@ -54,9 +54,12 @@
                       <tbody>
                       {% for road in road_list %}
 					            <tr>
-                          <td>{{ road.name}}</td>
+                          <td>{{ road.weather}}</td>
                           <td><i class="fa fa-square green falinn-xs"></i> {{ road.condition.status }}</td>
                           <td class="text-right falinn-xs">
+                            {% for forecast in road.weather.weatherforecast_set.all %}
+                            {{forecast.temp}}
+                            {% endfor %}
                           </td>
 					           </tr>
 					           {% endfor %}

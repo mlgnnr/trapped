@@ -3,7 +3,7 @@ import csv
 import codecs
 from datetime import datetime
 import xml.etree.ElementTree as etree
-from cond.models import Road, WeatherStation
+from cond.models import Road, WeatherStation, WeatherForecast
 from django.utils import timezone
 from cond.utility.date import DateUtility
 import logging
@@ -62,20 +62,54 @@ class Api():
     def parseForecast(response):
         csvfile = response.iter_lines()
         response_dict = csv.DictReader(codecs.iterdecode(csvfile, 'utf-8'))
-        Api.searchForecast(response_dict, 24)
+        Api.searchForecast(response_dict, 6)
 
     def searchForecast(forecasts, number_of_hours):
+
+        result = []
+        number_of_forecasts_added = 0
+        found_currentHour = False
+
         for forecast in forecasts:
             datetime_object = DateUtility.makeDateObject(forecast['Spátími'])
-            if (DateUtility.getDay(datetime_object) == DateUtility.getCurrentDay()):
-                print('correct day')
+
+            if not(found_currentHour):
+                if(DateUtility.sameDay(datetime_object) and DateUtility.sameHour(datetime_object)):
+                    print('correct hour and day')
+                    found_currentHour = True
+                    number_of_forecasts_added += 1
+                    Api.saveForecastObject(forecast)
+            elif (found_currentHour and number_of_forecasts_added <= number_of_hours):
+                number_of_forecasts_added += 1
+                Api.saveForecastObject(forecast)
+
+            if number_of_forecasts_added > number_of_hours:
+                break
+            #
+            # if (DateUtility.getDay(datetime_object) == DateUtility.getCurrentDay() and not(found_currentHour)):
+            #     print('correct day')
+            #     found_currentHour = True
+            #     result.append(forecast)
+            #     number_of_forecasts_added += 1
+
             # date = forecast['Spátími']
             # 2017-07-13 00:00:00
 
             # print(DateUtility.getCurrentHour())
             # print(datetime.now().strftime('%H'))
             # print(datetime_object.strftime('%H'))
-
+    def saveForecastObject(forecast):
+        road = Road.objects.get(name="Hellisheiði")
+        forecastObject = WeatherForecast()
+        forecastObject.weather = road.weather
+        forecastObject.name = "Hellisheiði"
+        forecastObject.time = forecast['Spátími']
+        forecastObject.wind = forecast['Vindhraði (m/s)']
+        forecastObject.wind_max = 0
+        forecastObject.wind_direction = forecast['Vindátt']
+        forecastObject.temp = forecast['Hiti (°C)']
+        forecastObject.sky = forecast['Veður']
+        forecastObject.save()
 
     def getWebcams():
         r = Api.makeRequest("webcam")
