@@ -69,6 +69,8 @@ class Api():
         result = []
         number_of_forecasts_added = 0
         found_currentHour = False
+        road = Road.objects.get(name="Hellisheiði")
+        road.weather.weatherforecast_set.all().delete()
 
         for forecast in forecasts:
             datetime_object = DateUtility.makeDateObject(forecast['Spátími'])
