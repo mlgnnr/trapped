@@ -177,6 +177,10 @@ class Api():
         road = Road.objects.get(id_butur=new_road['IdButur'])
         try:
             condition = road.condition
+            condition.status = new_road['StuttAstand']
+            condition.sign = new_road['Skilti']
+            condition.save()
+            print("New condition: " + condition.status)
         except Condition.DoesNotExist:
             new_condition = Condition(road=road,
                                       status=new_road['StuttAstand'],
