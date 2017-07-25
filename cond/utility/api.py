@@ -3,7 +3,8 @@ import csv
 import codecs
 from datetime import datetime
 import xml.etree.ElementTree as etree
-from cond.models import Road, WeatherStation, WeatherForecast, Condition
+from cond.models import Road, Weather, WeatherStation
+from cond.models import WeatherForecast, Condition, Image
 from django.utils import timezone
 from cond.utility.date import DateUtility
 from enum import Enum
@@ -15,7 +16,7 @@ class Api():
 
     # road_id_dir = {'hellisheidi_id': 902020003, 'threngslin_id': 902340003}
     road_id_dir = {'Sandskeið': 903260003, 'Hellisheiði': 902020003,
-                   'Þrengslin': 902340003}
+                   'Þrengsli': 902340003}
 
     station_id_dir = {'sandskeid_id': 17, 'hellisheidi_id': 1,
                       'threngslin_id': 31}
@@ -25,17 +26,32 @@ class Api():
     forecast_id_dir = {'hellisheidi_id': 31392,
                      'threngslin_id': 31387}
 
+
+
     hellisheidi_img = "http://www.vegagerdin.is/vgdata/vefmyndavelar/hellisheidi_3.jpg"
     threngslin_img = "http://www.vegagerdin.is/vgdata/vefmyndavelar/threngsli_1.jpg"
     sandskeid_img = "http://www.vegagerdin.is/vgdata/vefmyndavelar/sandskeid_1.jpg"
+
+    def addImages():
+        road = Road.objects.get(name="Hellisheiði")
+
+        if(road.image_set.count() == 0):
+            print("Not in database: " + "Images")
+            Api.addImagesThrengsli()
+            Api.addImagesHellisheidi()
+            Api.addImagesSandskeid()
+
+
 
     def addDataToDataBase():
         for road_name, road_id in Api.road_id_dir.items():
             road = (road_name, road_id)
             Api.databaseContainsRoad(road)
             # Api.databaseContainsRoad(road_id)
+
+        Api.addImages()
         Api.getRoadCondition()
-        # Api.getCurrentWeather()
+        Api.getCurrentWeather()
         # Api.getForecast()
         # Api.getWebCams()
 
@@ -46,6 +62,11 @@ class Api():
             print("Not in database: " + road[0])
             new_road = Road(name=road[0],id_butur=road[1],last_updated=timezone.now())
             new_road.save()
+            new_weather = Weather(road=new_road)
+            new_weather.save()
+            return
+
+
 
     def makeRequest(type):
         if(type == "condition"):
@@ -159,13 +180,11 @@ class Api():
 
     def search_road(response_road, road_id):
         if response_road['IdButur'] == road_id and response_road['IdLeid'] is not None:
-            print(response_road['IdLeid'])
             Api.updateRoadConditionObject(response_road)
 
     def searchWeatherStation(station, station_id):
         if station['Nr'] == station_id:
-            print(station['Nafn'])
-            Api.updateWeatherStationObject(station, station_id)
+            Api.updateWeatherStationObject(station)
 
     def searchWebcamStation(station, station_id):
         if station['Maelist_nr'] == station_id:
@@ -186,24 +205,27 @@ class Api():
                                       status=new_road['StuttAstand'],
                                       sign=new_road['Skilti'])
             new_condition.save()
+            print("New Condition object added: " + new_condition.status)
 
 
 
-        # Api.saveRoadConditionObject(new_road)
-        # if road_id == Api.road_id_dir['hellisheidi_id']:
-        #     Api.saveRoadObject(1, new_road)
-        # elif road_id == Api.road_id_dir['threngslin_id']:
-        #     Api.saveRoadObject(2, new_road)
-        # elif road_id == Api.road_id_dir['sandskeid_id']:
-        #     Api.saveRoadObject(3, new_road)
-
-    def updateWeatherStationObject(new_station, station_id):
-        if station_id == Api.station_id_dir['hellisheidi_id']:
-            Api.saveWeatherStationObject(1, new_station)
-        elif station_id == Api.station_id_dir['threngslin_id']:
-            Api.saveWeatherStationObject(2, new_station)
-        elif station_id == Api.station_id_dir['sandskeid_id']:
-            Api.saveWeatherStationObject(3, new_station)
+    def updateWeatherStationObject(new_station):
+        road = Road.objects.get(name=new_station['Nafn'])
+        try:
+            weatherstation = road.weather.weatherstation
+            Api.saveWeatherStationObject(weatherstation,new_station)
+        except WeatherStation.DoesNotExist:
+            new_weatherstation = WeatherStation(
+                                 road=road.weather,
+                                 name=new_station['Nafn'],
+                                 wind = new_station['Vindhradi'],
+                                 wind_direction = new_station['VindattAsc'],
+                                 wind_max = new_station['Vindhvida'],
+                                 temp = new_station['Hiti'],
+                                 temp_road = new_station['Veghiti'],
+                                 humidity = new_station['Raki'])
+            new_weatherstation.save()
+            print("New WeatherStation object added: " + new_weatherstation.name)
 
     def saveRoadConditionObject(new_road):
             road = Road.objects.get(pk=pk)
@@ -215,9 +237,7 @@ class Api():
             road.save()
             print("New condition: " + road.condition)
 
-    def saveWeatherStationObject(pk, new_station):
-            station = WeatherStation.objects.get(pk=pk)
-            print(station.wind_direction)
+    def saveWeatherStationObject(station, new_station):
             # Add notications if CHANGES
             station.wind = new_station['Vindhradi']
             station.wind_direction = new_station['VindattAsc']
@@ -225,5 +245,30 @@ class Api():
             station.temp = new_station['Hiti']
             station.temp_road = new_station['Veghiti']
             station.humidity = new_station['Raki']
+            station.last_updated = new_station['Dags']
             station.save()
-            print("Saved: Weather: " + station.name)
+            print("New weather: " + station.name)
+
+    def addImagesThrengsli():
+        road = Road.objects.get(name="Þrengsli")
+        for i in range(1,4):
+            new_img = Image(road=road,
+                            url="http://www.vegagerdin.is/vgdata/vefmyndavelar/threngsli_" + str(i) + ".jpg",
+                            image_id = i)
+            new_img.save()
+
+    def addImagesHellisheidi():
+        road = Road.objects.get(name="Hellisheiði")
+        for i in range(1,4):
+            new_img = Image(road=road,
+                            url="http://www.vegagerdin.is/vgdata/vefmyndavelar/hellisheidi_" + str(i) + ".jpg",
+                            image_id = i)
+            new_img.save()
+
+    def addImagesSandskeid():
+        road = Road.objects.get(name="Sandskeið")
+        for i in range(1,3):
+            new_img = Image(road=road,
+                            url="http://www.vegagerdin.is/vgdata/vefmyndavelar/sandskeid" + str(i) + ".jpg",
+                            image_id = i)
+            new_img.save()
