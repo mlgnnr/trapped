@@ -126,7 +126,7 @@ class Api():
             datetime_object = DateUtility.makeDateObject(forecast['Spátími'])
 
             #IF current hour is not found - use first items in dict
-            if index <= number_of_hours:
+            if index < number_of_hours:
                     midnight_list.append(forecast)
                     index += 1
 
