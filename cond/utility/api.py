@@ -108,17 +108,27 @@ class Api():
 
     def searchForecast(forecasts, number_of_hours):
 
-        result = []
         number_of_forecasts_added = 0
         found_currentHour = False
         road = Road.objects.get(name="Hellisheiði")
-        print("Hallo")
-        road.weather.weatherforecast_set.all().delete()
-        print(road)
+        forecasts_database = road.weather.weatherforecast_set.all()
+        midnight_list = []
+
+        if not forecasts_database:
+            print("Database empty")
+        else:
+            print("Deleted Forecasts in database")
+            road.weather.weatherforecast_set.all().delete()
 
 
+        index = 0
         for forecast in forecasts:
             datetime_object = DateUtility.makeDateObject(forecast['Spátími'])
+
+            #IF current hour is not found - use first items in dict
+            if index <= number_of_hours:
+                    midnight_list.append(forecast)
+                    index += 1
 
             if not(found_currentHour):
                 # print(DateUtility.sameDay(datetime_object))
@@ -135,22 +145,14 @@ class Api():
             if number_of_forecasts_added > number_of_hours:
                 break
 
+        #IF current hour is not in forecast
+        if not found_currentHour:
+            for forecast in midnight_list:
+                datetime_object = DateUtility.makeDateObject(forecast['Spátími'])
+                Api.saveForecastObject(forecast, datetime_object)
 
 
-        ## IF EMPTY, add first 6 of
 
-            # if (DateUtility.getDay(datetime_object) == DateUtility.getCurrentDay() and not(found_currentHour)):
-            #     print('correct day')
-            #     found_currentHour = True
-            #     result.append(forecast)
-            #     number_of_forecasts_added += 1
-
-            # date = forecast['Spátími']
-            # 2017-07-13 00:00:00
-
-            # print(DateUtility.getCurrentHour())
-            # print(datetime.now().strftime('%H'))
-            # print(datetime_object.strftime('%H'))
     def saveForecastObject(forecast, datetime_object):
         road = Road.objects.get(name="Hellisheiði")
         forecastObject = WeatherForecast()
