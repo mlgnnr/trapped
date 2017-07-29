@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from .models import Road
+from operator import itemgetter
 import logging
 
 logger = logging.getLogger(__name__)
@@ -21,8 +22,12 @@ def home(request):
 
 def index(request):
     road_list = []
-    road_list.append(get_object_or_404(Road, name="Hellisheiði"))
+    roads = Road.objects.all()
 
+    for road in roads:
+        road_list.append(road)
+
+    # road_list = sorted(road_list, key=itemgetter('name'))
     context = {'road_list': road_list,}
     return render(request, 'cond/index.html', context)
 

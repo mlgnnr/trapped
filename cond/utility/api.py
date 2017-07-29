@@ -11,12 +11,14 @@ from enum import Enum
 import logging
 
 logger = logging.getLogger(__name__)
+forecast_hours = 12
+
 
 class Api():
 
     # road_id_dir = {'hellisheidi_id': 902020003, 'threngslin_id': 902340003}
-    road_id_dir = {'Sandskeið': 903260003, 'Hellisheiði': 902020003,
-                   'Þrengsli': 902340003}
+    road_id_dir = {'Hellisheiði': 902020003,
+                   'Þrengsli': 902340003, 'Sandskeið': 903260003}
 
     station_id_dir = {'sandskeid_id': 17, 'hellisheidi_id': 1,
                       'threngslin_id': 31}
@@ -52,7 +54,7 @@ class Api():
         Api.addImages()
         Api.getRoadCondition()
         Api.getCurrentWeather()
-        # Api.getForecast()
+        Api.getForecast()
         # Api.getWebCams()
 
     def databaseContainsRoad(road):
@@ -102,35 +104,41 @@ class Api():
     def parseForecast(response):
         csvfile = response.iter_lines()
         response_dict = csv.DictReader(codecs.iterdecode(csvfile, 'utf-8'))
-        Api.searchForecast(response_dict, 6)
+        Api.searchForecast(response_dict, forecast_hours)
 
     def searchForecast(forecasts, number_of_hours):
 
         result = []
         number_of_forecasts_added = 0
         found_currentHour = False
-        road = Road.objects.get(name="Hellieiði")
+        road = Road.objects.get(name="Hellisheiði")
         print("Hallo")
         road.weather.weatherforecast_set.all().delete()
         print(road)
 
 
-        # for forecast in forecasts:
-        #     datetime_object = DateUtility.makeDateObject(forecast['Spátími'])
-        #
-        #     if not(found_currentHour):
-        #         if(DateUtility.sameDay(datetime_object) and DateUtility.sameHour(datetime_object)):
-        #             print('correct hour and day')
-        #             found_currentHour = True
-        #             number_of_forecasts_added += 1
-        #             Api.saveForecastObject(forecast)
-        #     elif (found_currentHour and number_of_forecasts_added <= number_of_hours):
-        #         number_of_forecasts_added += 1
-        #         Api.saveForecastObject(forecast)
-        #
-        #     if number_of_forecasts_added > number_of_hours:
-        #         break
-            #
+        for forecast in forecasts:
+            datetime_object = DateUtility.makeDateObject(forecast['Spátími'])
+
+            if not(found_currentHour):
+                # print(DateUtility.sameDay(datetime_object))
+                # print(DateUtility.sameHour(datetime_object))
+                if(DateUtility.sameDay(datetime_object) and DateUtility.sameHour(datetime_object)):
+                    print('correct hour and day', forecast['Spátími'])
+                    found_currentHour = True
+                    number_of_forecasts_added += 1
+                    Api.saveForecastObject(forecast, datetime_object)
+            elif (found_currentHour and number_of_forecasts_added <= number_of_hours):
+                number_of_forecasts_added += 1
+                Api.saveForecastObject(forecast, datetime_object)
+
+            if number_of_forecasts_added > number_of_hours:
+                break
+
+
+
+        ## IF EMPTY, add first 6 of
+
             # if (DateUtility.getDay(datetime_object) == DateUtility.getCurrentDay() and not(found_currentHour)):
             #     print('correct day')
             #     found_currentHour = True
@@ -143,12 +151,12 @@ class Api():
             # print(DateUtility.getCurrentHour())
             # print(datetime.now().strftime('%H'))
             # print(datetime_object.strftime('%H'))
-    def saveForecastObject(forecast):
+    def saveForecastObject(forecast, datetime_object):
         road = Road.objects.get(name="Hellisheiði")
         forecastObject = WeatherForecast()
         forecastObject.weather = road.weather
         forecastObject.name = "Hellisheiði"
-        forecastObject.time = forecast['Spátími']
+        forecastObject.hour = DateUtility.getHour(datetime_object)
         forecastObject.wind = forecast['Vindhraði (m/s)']
         forecastObject.wind_max = 0
         forecastObject.wind_direction = forecast['Vindátt']

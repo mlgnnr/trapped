@@ -42,9 +42,9 @@ class WeatherStation (models.Model):
 class WeatherForecast (models.Model):
     weather = models.ForeignKey(Weather)
     name = models.CharField(max_length=200)
-    time = models.DateTimeField(blank=True, default=datetime.now)
+    hour = models.SmallIntegerField(blank=True, null=True)
     wind_direction = models.CharField(blank=True, max_length=10)
-    wind_max = models.DecimalField(max_digits=3, decimal_places=0)
+    wind = models.SmallIntegerField(blank=True, null=True)
     temp = models.DecimalField(max_digits=3, decimal_places=0)
     sky = models.CharField(blank=True, max_length=100)
 
