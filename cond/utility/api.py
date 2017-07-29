@@ -279,6 +279,6 @@ class Api():
         road = Road.objects.get(name="Sandskeið")
         for i in range(1,3):
             new_img = Image(road=road,
-                            url="http://www.vegagerdin.is/vgdata/vefmyndavelar/sandskeid" + str(i) + ".jpg",
+                            url="http://www.vegagerdin.is/vgdata/vefmyndavelar/sandskeid_" + str(i) + ".jpg",
                             image_id = i)
             new_img.save()

@@ -79,6 +79,11 @@
                          </tr>
                           </tbody>
                         </table>
+                        <div class="col-xs-12">
+                          {% with road.image_set.all|first as first_road_image %}
+                              <img class="img-responsive" src="{{ first_road_image.url }}" alt="">
+                          {% endwith %}
+                        </div>
                     </div>
 
                     <div id="{{ road.name }}forecast" class="tab-pane fade">
