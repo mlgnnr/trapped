@@ -6,3 +6,7 @@
 
 ## Django Template shortcuts
 (https://github.com/squ1b3r/Djaneiro)
+
+
+## Heroku Custom DNS
+(https://www.namecheap.com/support/knowledgebase/article.aspx/9737/2208/pointing-a-domain-to-the-heroku-app)

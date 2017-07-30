@@ -40,7 +40,7 @@
             <div class="col-lg-4 col-md-4 col-md-offset-4 col-sm-8 col-sm-offset-2 col-xs-12">
               <div class="x_panel">
                 <div class="x_title" >
-                  <h2 data-toggle="collapse" data-target="#{{ road.name }}content">{{ road.name }} </h2>
+                  <h2 style="cursor: pointer;" data-toggle="collapse" data-target="#{{ road.name }}content">{{ road.name }} </h2>
                   {% if forloop.first %}
                   <div class="collapse in" id="{{ road.name }}content" style="text-align: center;">
                   {% else %}
@@ -101,7 +101,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                        {% for forecast in road.weather.weatherforecast_set.all %}
+                        {% for forecast in road.weather.weatherforecast_set.all%}
                         <tr>
                             <td>{{ forecast.hour }} </td>
                             <td>{{ forecast.sky }}</td>
