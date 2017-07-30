@@ -1,26 +1,35 @@
 
 html , body{
-	
+
  height:100%;
- 
+
 }
+.text-center {
+  text-align: center;
+}
+
+.nav-tabs > li {
+  float: right;
+  margin-bottom: -1px;
+}
+
 .smapadding {
     padding-left: 20px
-} 
+}
 @media (max-width: 326px) {
   .falinn-xs {
     display: none !important;
   }
 }
 .full-width {
-	
+
  width:100%;
- 
+
  }
- 
+
 .full-height{
  height:100%;
- } 
+ }
 
 .daterangepicker .ranges li {
     color: #73879C
@@ -392,8 +401,8 @@ body .container.body .right_col {
 }
 @media (max-width: 1200px) {
     .x_title h2 {
-        width: 62%;
-        font-size: 17px
+        width: 50%;
+        font-size: 19px
     }
     .tile,
     .graph {
@@ -502,7 +511,7 @@ body .container.body .right_col {
 }
 body {
     color: #73879C;
-    background: none;
+    background: #f5f5f5;
     font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
     font-size: 13px;
     font-weight: 400;
@@ -1078,7 +1087,7 @@ h2 {
     transition: all .2s ease
 }
 .x_title {
-    border-bottom: 2px solid #E6E9ED;
+    border-bottom: 0px solid #E6E9ED;
     padding: 1px 5px 6px;
     margin-bottom: 10px
 }
@@ -1087,7 +1096,7 @@ h2 {
     float: right
 }
 .x_title h2 {
-    margin: 5px 0 6px;
+    margin: 14px 0 6px;
     float: left;
     display: block;
     text-overflow: ellipsis;
@@ -4247,7 +4256,7 @@ ul.notifications {
 table thead .checkbox { margin-top:-7px;margin-top:-21px; }
 table thead .checkbox.radio { margin-top:-7px;margin-top:-21px; }
 */
-			
+
 .daterangepicker.xdisplay { width:228px; }
 
 .dataTables_wrapper > .row{

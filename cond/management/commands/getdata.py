@@ -11,5 +11,8 @@ class Command(BaseCommand):
     help = 'gets data from vegagerdin'
 
     def handle(self, *args, **options):
-        Api.getRoads()
-        Api.getCurrentWeather()
+
+        Api.addDataToDataBase()
+        # Api.getForecast()
+        # Api.getRoads()
+        # Api.getCurrentWeather()

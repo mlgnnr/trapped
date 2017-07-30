@@ -20,13 +20,12 @@
     <link href="/static/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
     <!-- bootstrap-daterangepicker -->
     <link href="/static/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
-    
+
     <!-- Custom Theme Style -->
     <link href="/static/build/css/custom.min.css" rel="stylesheet">
     <link href="/static/build/css/custom.css" rel="stylesheet">
 
   </head>
-
   <body>
     <div class="container body">
       <div class="main_container">
@@ -35,133 +34,158 @@
 
         <!-- page content -->
         <div class="right_col">
-			</br>    	
-              <div class="col-lg-3 col-lg-offset-3 col-md-4 col-md-offset-2 col-sm-6 col-xs-12 ">
-                <div class="x_panel">
-                  <div class="x_title collapse-link">
-                    <h2>Færð<small>{{update_time}}</small></h2>
-                    <div class="clearfix"></div>
+          <br>
+          {% for road in road_list %}
+          <div class="row">
+            <div class="col-lg-4 col-md-4 col-md-offset-4 col-sm-8 col-sm-offset-2 col-xs-12">
+              <div class="x_panel">
+                <div class="x_title" >
+                  <h2 data-toggle="collapse" data-target="#{{ road.name }}content">{{ road.name }} </h2>
+                  {% if forloop.first %}
+                  <div class="collapse in" id="{{ road.name }}content" style="text-align: center;">
+                  {% else %}
+                  <div class="collapse" id="{{ road.name }}content" style="text-align: center;">
+                  {% endif %}
+                    <ul class="nav nav-tabs">
+                      <li><a data-toggle="tab" href="#{{ road.name }}forecast">Spá</a></li>
+                      <li class="active"><a data-toggle="tab" href="#{{ road.name }}condition">Færð</a></li>
+                    </ul>
                   </div>
-                  <div class="x_content">
-                    <table class="table table-striped">
-                      <thead>
+                  <div class="clearfix"></div>
+                </div>
+
+                <!--<div class="x_title collapse-link">
+                  <h2>{{ road.name }}<small>{{update_time}}</small></h2>
+                  <div class="clearfix"></div>
+                </div>  -->
+                {% if forloop.first %}
+                <div class="x_content collapse in" id="{{ road.name }}content">
+                {% else %}
+                <div class="x_content collapse" id="{{ road.name }}content">
+                {% endif %}
+                  <div class="tab-content">
+                    <div id="{{ road.name }}condition" class="tab-pane fade in active">
+                        <table class="table table-striped">
+                          <thead>
+                            <tr>
+                              <th>Ástand</th>
+                              <th>Athugasemd</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          <tr>
+                              <td>{{ road.condition.status }}</td>
+                              {% if road.condition.sign %}
+                                <td>{{ road.condition.sign }}</td>
+                              {% else %}
+                                <td> Engin </td>
+                              {% endif %}
+                         </tr>
+                          </tbody>
+                        </table>
+                        <div class="col-xs-12" data-toggle="modal" data-target="#{{road.name}}Modal">
+                          {% with road.image_set.all|first as first_road_image %}
+                              <img class="img-responsive" src="{{ first_road_image.url }}" alt="">
+                          {% endwith %}
+                        </div>
+                    </div>
+
+                    <div id="{{ road.name }}forecast" class="tab-pane fade">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th>Klukkan</th>
+                            <th>Veður</th>
+                            <th>Hiti</th>
+                            <th>Vindur</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for forecast in road.weather.weatherforecast_set.all %}
                         <tr>
-                          <th>Vegbútur</th>
-                          <th>Ástand</th>
-                          <th class="text-right falinn-xs">Síðustu 5 klst</th> 
-                        </tr>
-                      </thead>
-                      <tbody>
-                      {% for road in road_list %}
-					    <tr>
-                          <td>{{ road.name}}</td>
-                          <td><i class="fa fa-square green falinn-xs"></i> {{ road.condition }}</td>
-                          <td class="text-right falinn-xs">
-                          {% for status in road.roadcondition_set.all %}
-                          	<i class="fa fa-square green" data-toggle="tooltip" data-placement="top" title="22:00 Greiðfært"></i>
-                          {% endfor %}
-                          </td>
-					    </tr>
-					  {% endfor %}
-                      </tbody>
-                    <p><i>Uppfært: {{ update_time }}</i></p>
-                    </table>
+                            <td>{{ forecast.hour }} </td>
+                            <td>{{ forecast.sky }}</td>
+                            <td>{{ forecast.temp }}</td>
+                            <td>{{ forecast.wind }} {{forecast.wind_direction}}</td>
+                       </tr>
+                       {% empty %}
+                       <tr>
+                           <td> Væntanlegt </td>
+                           <td> ... </td>
+                           <td> ... </td>
+                           <td> ... </td>
+                      </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <!-- start of weather widget -->
-              <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title collapse-link">
-                    <h2>Veðurstöðvar <small></small></h2>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                        <ul class="list-unstyled">
-	                     {% for station in weatherstation_list %}                        
-                          <li class="media event">
-                              <div class="media-body">
+          </div>
+          <!-- Start of Modal -->
+          <div class="modal fade" id="{{road.name}}Modal" role="dialog">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="container">
+                 <div id="{{ road.name }}Carousel" class="carousel slide" data-ride="carousel">
+                   <!-- Indicators -->
+                   <ol class="carousel-indicators">
+                     {% for image in road.image_set.all  %}
+                       {% if forloop.first %}
+                       <li data-target="#{{ road.name }}Carousel" data-slide-to={{ image.id }} class="active"></li>
+                       {% else %}
+                     <li data-target="#{{ road.name }}Carousel" data-slide-to={{ image.id }}></li>
+                       {% endif %}
+                     {% endfor %}
+                   </ol>
 
-                              <a class="title" href="#">{{ station.name }}</a>
-                              <p>{{ station.temp }}° </p>
-                              <p>{{ station.wind }} m/s {{ station.wind_direction }}
-                              </p>
-                            </div>
-                            <div class="media-body">
-                              <p>Greiðfært</p>
-                              <p>Allur akstur bannaður</p>
-                              <p>
-	                            <i class="fa fa-square green":></i>
-	                          	<i class="fa fa-square green"></i>
-	                          	<i class="fa fa-square red"></i>
-	                          	<i class="fa fa-square yellow"></i>
-	                          	<i class="fa fa-square red"></i>
-                              </p>
-                            </div>
-                            <div class="media-body" data-toggle="modal" data-target=".bs-example-modal-lg">
-                              <img src="http://www.vegagerdin.is/vgdata/vefmyndavelar/hellisheidi_1.jpg" alt="" class="img-responsive">
-                            </div>
-                          </li>
-                         {% endfor %}
-                        </ul>
+                   <!-- Wrapper for slides -->
+                   <div class="carousel-inner">
+                     {% for image in road.image_set.all  %}
+                       {% if forloop.first %}
+                       <div class="item active">
+                         <img src="{{ image.url }}" alt="" style="width:100%;">
+                       </div>
+                       {% else %}
+                       <div class="item ">
+                         <img src="{{ image.url }}" alt="" style="width:100%;">
+                       </div>
+                       {% endif %}
+                     {% endfor %}
                   </div>
-                </div>
+
+                   <!-- Left and right controls -->
+                 <a class="left carousel-control" href="#{{ road.name }}Carousel" data-slide="prev">
+                   <span class="glyphicon glyphicon-chevron-left"></span>
+                   <span class="sr-only">Previous</span>
+                 </a>
+                 <a class="right carousel-control" href="#{{ road.name }}Carousel" data-slide="next">
+                   <span class="glyphicon glyphicon-chevron-right"></span>
+                   <span class="sr-only">Next</span>
+                 </a>
+                 </div>
+               </div>
+             </div>
+            </div>
+          </div>
+          {% endfor %}
+          <div class="col-lg-4 col-md-4 col-md-offset-4 col-sm-8 col-sm-offset-2 col-xs-12">
+            <div class="text-center">
+              <p> Byggt á gögnum frá <b>Vegagerðinni</b> og <b>Veðurstofu Íslands</b></h4>
+              <p>Heiðin.is er undanskilin fyrirsvari, ábyrgð, skyldum og skaðabótum í tengslum við upplýsingarnar að því marki sem lög leyfa.</p>
+            </div>
+          </div>
 
               </div>
-            <!-- Large modal -->
+            </div>
+          </div>
 
-<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-  <div class="container">
-  <div id="myCarousel" class="carousel slide" data-ride="carousel">
-    <!-- Indicators -->
-    <ol class="carousel-indicators">
-      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-      <li data-target="#myCarousel" data-slide-to="1"></li>
-      <li data-target="#myCarousel" data-slide-to="2"></li>
-    </ol>
-
-    <!-- Wrapper for slides -->
-    <div class="carousel-inner">
-      <div class="item active">
-        <img src="http://www.vegagerdin.is/vgdata/vefmyndavelar/hellisheidi_1.jpg" alt="Los Angeles" style="width:100%;">
-      </div>
-
-      <div class="item">
-        <img src="http://www.vegagerdin.is/vgdata/vefmyndavelar/hellisheidi_2.jpg" alt="Chicago" style="width:100%;">
-      </div>
-    
-      <div class="item">
-        <img src="http://www.vegagerdin.is/vgdata/vefmyndavelar/hellisheidi_3.jpg" alt="New york" style="width:100%;">
-      </div>
-    </div>
-
-    <!-- Left and right controls -->
-  <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-    <span class="glyphicon glyphicon-chevron-left"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="right carousel-control" href="#myCarousel" data-slide="next">
-    <span class="glyphicon glyphicon-chevron-right"></span>
-    <span class="sr-only">Next</span>
-  </a>
-  </div>
-</div>
-{#     	<img src="http://www.vegagerdin.is/vgdata/vefmyndavelar/hellisheidi_1.jpg" alt="" class="img-responsive"> #}
-    </div>
-  </div>
-
-</div>
               <!-- end of weather widget -->
             </div>
           </div>
-        </div>
-        <!-- /page content -->
-
-      </div>
-    </div>
 
     <!-- jQuery -->
     <script src="/static/vendors/jquery/dist/jquery.min.js"></script>
