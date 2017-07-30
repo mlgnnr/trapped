@@ -22,11 +22,12 @@ def home(request):
 
 def index(request):
     road_list = []
-    roads = Road.objects.all()
+    roads = Road.objects.all().order_by('-name')
 
     for road in roads:
         road_list.append(road)
 
+    road_list.reverse()
     # road_list = sorted(road_list, key=itemgetter('name'))
     context = {'road_list': road_list,}
     return render(request, 'cond/index.html', context)
