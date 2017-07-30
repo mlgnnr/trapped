@@ -20,11 +20,12 @@
     <link href="/static/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
     <!-- bootstrap-daterangepicker -->
     <link href="/static/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
-    
+
     <!-- Custom Theme Style -->
     <link href="/static/build/css/custom.min.css" rel="stylesheet">
-  </head>
+    <link href="/static/build/css/custom.css" rel="stylesheet">
 
+  </head>
   <body>
     <div class="container body">
       <div class="main_container">
@@ -32,168 +33,159 @@
         <!-- /top navigation -->
 
         <!-- page content -->
-        <div class="right_col" role="main">
-            <br />
-            <div class="row">
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title collapse-link">
-                    <h2>Færð<small>yfirlit</small></h2>
-                    <div class="clearfix"></div>
+        <div class="right_col">
+          <br>
+          {% for road in road_list %}
+          <div class="row">
+            <div class="col-lg-4 col-md-4 col-md-offset-4 col-sm-8 col-sm-offset-2 col-xs-12">
+              <div class="x_panel">
+                <div class="x_title" >
+                  <h2 data-toggle="collapse" data-target="#{{ road.name }}content">{{ road.name }} </h2>
+                  {% if forloop.first %}
+                  <div class="collapse in" id="{{ road.name }}content" style="text-align: center;">
+                  {% else %}
+                  <div class="collapse" id="{{ road.name }}content" style="text-align: center;">
+                  {% endif %}
+                    <ul class="nav nav-tabs">
+                      <li><a data-toggle="tab" href="#{{ road.name }}forecast">Spá</a></li>
+                      <li class="active"><a data-toggle="tab" href="#{{ road.name }}condition">Færð</a></li>
+                    </ul>
                   </div>
-                  <div class="x_content">
+                  <div class="clearfix"></div>
+                </div>
 
-                    <table class="table">
-                      <thead>
+                <!--<div class="x_title collapse-link">
+                  <h2>{{ road.name }}<small>{{update_time}}</small></h2>
+                  <div class="clearfix"></div>
+                </div>  -->
+                {% if forloop.first %}
+                <div class="x_content collapse in" id="{{ road.name }}content">
+                {% else %}
+                <div class="x_content collapse" id="{{ road.name }}content">
+                {% endif %}
+                  <div class="tab-content">
+                    <div id="{{ road.name }}condition" class="tab-pane fade in active">
+                        <table class="table table-striped">
+                          <thead>
+                            <tr>
+                              <th>Ástand</th>
+                              <th>Athugasemd</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          <tr>
+                              <td>{{ road.condition.status }}</td>
+                              {% if road.condition.sign %}
+                                <td>{{ road.condition.sign }}</td>
+                              {% else %}
+                                <td> Engin </td>
+                              {% endif %}
+                         </tr>
+                          </tbody>
+                        </table>
+                        <div class="col-xs-12" data-toggle="modal" data-target="#{{road.name}}Modal">
+                          {% with road.image_set.all|first as first_road_image %}
+                              <img class="img-responsive" src="{{ first_road_image.url }}" alt="">
+                          {% endwith %}
+                        </div>
+                    </div>
+
+                    <div id="{{ road.name }}forecast" class="tab-pane fade">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th>Klukkan</th>
+                            <th>Veður</th>
+                            <th>Hiti</th>
+                            <th>Vindur</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for forecast in road.weather.weatherforecast_set.all %}
                         <tr>
-                          <th>#</th>
-                          <th>Vegbútur</th>
-                          <th>Ástand</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <th scope="row"></th>
-                          <td>{{ road.name }}</td>
-                          <td>{{ road.condition }}</td>
-                        </tr>
-                        <tr>
-                          <th scope="row"></th>
-                          <td>Væntanlegt</td>
-                          <td></td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <th scope="row"></th>
-                          <td>Væntanlegt</td>
-                          <td></td>
-                          <td></td>
-                        </tr>
-                      </tbody>
-                    <p><i>Uppfært: {{ update_time }}</i></p>
-                    </table>
+                            <td>{{ forecast.hour }} </td>
+                            <td>{{ forecast.sky }}</td>
+                            <td>{{ forecast.temp }}</td>
+                            <td>{{ forecast.wind }} {{forecast.wind_direction}}</td>
+                       </tr>
+                       {% empty %}
+                       <tr>
+                           <td> Væntanlegt </td>
+                           <td> ... </td>
+                           <td> ... </td>
+                           <td> ... </td>
+                      </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <!-- start of weather widget -->
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title collapse-link">
-                    <h2>Veður <small>væntanlegt</small></h2>
-                    <div class="clearfix"></div>
+          </div>
+          <!-- Start of Modal -->
+          <div class="modal fade" id="{{road.name}}Modal" role="dialog">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="container">
+                 <div id="{{ road.name }}Carousel" class="carousel slide" data-ride="carousel">
+                   <!-- Indicators -->
+                   <ol class="carousel-indicators">
+                     {% for image in road.image_set.all  %}
+                       {% if forloop.first %}
+                       <li data-target="#{{ road.name }}Carousel" data-slide-to={{ image.id }} class="active"></li>
+                       {% else %}
+                     <li data-target="#{{ road.name }}Carousel" data-slide-to={{ image.id }}></li>
+                       {% endif %}
+                     {% endfor %}
+                   </ol>
+
+                   <!-- Wrapper for slides -->
+                   <div class="carousel-inner">
+                     {% for image in road.image_set.all  %}
+                       {% if forloop.first %}
+                       <div class="item active">
+                         <img src="{{ image.url }}" alt="" style="width:100%;">
+                       </div>
+                       {% else %}
+                       <div class="item ">
+                         <img src="{{ image.url }}" alt="" style="width:100%;">
+                       </div>
+                       {% endif %}
+                     {% endfor %}
                   </div>
-                  <div class="x_content">
-                    <div class="row">
-                      <div class="col-sm-12">
-                        <div class="temperature"><b>Mánudagur</b>, 07:30
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-sm-4">
-                        <div class="weather-icon">
-                          <span>
-                                              <canvas height="84" width="84" id="partly-cloudy-day"></canvas>
-                                          </span>
 
-                        </div>
-                      </div>
-                      <div class="col-sm-8">
-                        <div class="weather-text">
-                          <h2><b>Virkni væntanleg</b>
-                                              <br><i>Skýjað með köflum í dag</i>
-                                          </h2>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-12">
-                      <div class="weather-text pull-right">
-                        <h3 class="degrees">23</h3>
-                      </div>
-                    </div>
-                    <div class="clearfix"></div>
-
-
-                    <div class="row weather-days">
-                      <div class="col-sm-2">
-                        <div class="daily-weather">
-                          <h2 class="day">Mán</h2>
-                          <h3 class="degrees">25</h3>
-                          <span>
-                                                  <canvas id="clear-day" width="32" height="32">
-                                                  </canvas>
-
-                                          </span>
-                          <h5>15
-                                              <i>m/s</i>
-                                          </h5>
-                        </div>
-                      </div>
-                      <div class="col-sm-2">
-                        <div class="daily-weather">
-                          <h2 class="day">Þri</h2>
-                          <h3 class="degrees">25</h3>
-                          <canvas height="32" width="32" id="rain"></canvas>
-                          <h5>12
-                                              <i>m/s</i>
-                                          </h5>
-                        </div>
-                      </div>
-                      <div class="col-sm-2">
-                        <div class="daily-weather">
-                          <h2 class="day">Mið</h2>
-                          <h3 class="degrees">27</h3>
-                          <canvas height="32" width="32" id="snow"></canvas>
-                          <h5>14
-                                              <i>m/s</i>
-                                          </h5>
-                        </div>
-                      </div>
-                      <div class="col-sm-2">
-                        <div class="daily-weather">
-                          <h2 class="day">Fim</h2>
-                          <h3 class="degrees">28</h3>
-                          <canvas height="32" width="32" id="sleet"></canvas>
-                          <h5>15
-                                              <i>m/s</i>
-                                          </h5>
-                        </div>
-                      </div>
-                      <div class="col-sm-2">
-                        <div class="daily-weather">
-                          <h2 class="day">Fös</h2>
-                          <h3 class="degrees">28</h3>
-                          <canvas height="32" width="32" id="wind"></canvas>
-                          <h5>11
-                                              <i>m/s</i>
-                                          </h5>
-                        </div>
-                      </div>
-                      <div class="col-sm-2">
-                        <div class="daily-weather">
-                          <h2 class="day">Lau</h2>
-                          <h3 class="degrees">26</h3>
-                          <canvas height="32" width="32" id="cloudy"></canvas>
-                          <h5>10
-                                              <i>m/s</i>
-                                          </h5>
-                        </div>
-                      </div>
-                      <div class="clearfix"></div>
-                    </div>
-                  </div>
-                </div>
+                   <!-- Left and right controls -->
+                 <a class="left carousel-control" href="#{{ road.name }}Carousel" data-slide="prev">
+                   <span class="glyphicon glyphicon-chevron-left"></span>
+                   <span class="sr-only">Previous</span>
+                 </a>
+                 <a class="right carousel-control" href="#{{ road.name }}Carousel" data-slide="next">
+                   <span class="glyphicon glyphicon-chevron-right"></span>
+                   <span class="sr-only">Next</span>
+                 </a>
+                 </div>
+               </div>
+             </div>
+            </div>
+          </div>
+          {% endfor %}
+          <div class="col-lg-4 col-md-4 col-md-offset-4 col-sm-8 col-sm-offset-2 col-xs-12">
+            <div class="text-center">
+              <p> Byggt á gögnum frá <b>Vegagerðinni</b> og <b>Veðurstofu Íslands</b></h4>
+              <p>Heiðin.is er undanskilin fyrirsvari, ábyrgð, skyldum og skaðabótum í tengslum við upplýsingarnar að því marki sem lög leyfa.</p>
+            </div>
+          </div>
 
               </div>
+            </div>
+          </div>
+
               <!-- end of weather widget -->
             </div>
           </div>
-        </div>
-        <!-- /page content -->
-
-      </div>
-    </div>
 
     <!-- jQuery -->
     <script src="/static/vendors/jquery/dist/jquery.min.js"></script>

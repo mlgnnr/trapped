@@ -6687,7 +6687,7 @@ button.close {
     display: inline-block !important;
   }
 }
-@media (max-width: 767px) {
+@media (max-width: 320px) {
   .hidden-xs {
     display: none !important;
   }
