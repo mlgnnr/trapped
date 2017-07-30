@@ -4,7 +4,7 @@ import subprocess
 sched = BlockingScheduler()
 
 
-@sched.scheduled_job('interval', minutes=1)
+@sched.scheduled_job('interval', minutes=10)
 def timed_job():
     subprocess.call(['./manage.py', 'getdata'])
 
