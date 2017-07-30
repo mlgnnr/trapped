@@ -130,14 +130,14 @@
             <div class="modal-dialog modal-lg">
               <div class="modal-content">
                 <div class="container">
-                 <div id="{{ road.name }}myCarousel" class="carousel slide" data-ride="carousel">
+                 <div id="{{ road.name }}Carousel" class="carousel slide" data-ride="carousel">
                    <!-- Indicators -->
                    <ol class="carousel-indicators">
                      {% for image in road.image_set.all  %}
                        {% if forloop.first %}
-                       <li data-target="#{{ road.name }}myCarousel" data-slide-to={{ image.id }} class="active"></li>
+                       <li data-target="#{{ road.name }}Carousel" data-slide-to={{ image.id }} class="active"></li>
                        {% else %}
-                     <li data-target="#{{ road.name }}myCarousel" data-slide-to={{ image.id }}></li>
+                     <li data-target="#{{ road.name }}Carousel" data-slide-to={{ image.id }}></li>
                        {% endif %}
                      {% endfor %}
                    </ol>
@@ -158,11 +158,11 @@
                   </div>
 
                    <!-- Left and right controls -->
-                 <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                 <a class="left carousel-control" href="#{{ road.name }}Carousel" data-slide="prev">
                    <span class="glyphicon glyphicon-chevron-left"></span>
                    <span class="sr-only">Previous</span>
                  </a>
-                 <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                 <a class="right carousel-control" href="#{{ road.name }}Carousel" data-slide="next">
                    <span class="glyphicon glyphicon-chevron-right"></span>
                    <span class="sr-only">Next</span>
                  </a>
