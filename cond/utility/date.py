@@ -40,3 +40,6 @@ class DateUtility():
 
     def makeDateObject(forecast_time):
         return datetime.strptime(forecast_time, '%Y-%m-%d %H:%M:%S')
+
+    def ConditionMakeDateObject(last_update):
+        return datetime.strptime(last_update, '%d.%m.%Y %H:%M:%S')

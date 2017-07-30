@@ -202,17 +202,19 @@ class Api():
 
 
     def updateRoadConditionObject(new_road):
-
+        datetime_object = DateUtility.ConditionMakeDateObject(new_road['DagsKeyrtUt'])
         road = Road.objects.get(id_butur=new_road['IdButur'])
         try:
             condition = road.condition
             condition.status = new_road['StuttAstand']
             condition.sign = new_road['Skilti']
+            condition.last_update = datetime_object
             condition.save()
             print("New condition: " + condition.status)
         except Condition.DoesNotExist:
             new_condition = Condition(road=road,
                                       status=new_road['StuttAstand'],
+                                      last_update = datetime_object,
                                       sign=new_road['Skilti'])
             new_condition.save()
             print("New Condition object added: " + new_condition.status)

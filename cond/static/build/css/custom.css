@@ -8,6 +8,10 @@ html , body{
   text-align: center;
 }
 
+.text-center {
+  text-align: right;
+}
+
 .nav-tabs > li {
   float: right;
   margin-bottom: -1px;

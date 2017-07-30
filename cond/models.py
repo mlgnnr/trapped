@@ -15,6 +15,7 @@ class Condition (models.Model):
     road = models.OneToOneField(Road,on_delete=models.CASCADE)
     status = models.CharField(blank=True, max_length=70)
     sign = models.IntegerField(blank=True, null=True)
+    last_update = models.DateTimeField(blank=True, default=datetime.now)
 
     def __str__(self):
         return self.road.name
