@@ -75,11 +75,15 @@
                           <tbody>
                           <tr>
                               <td>{{ road.condition.status }}</td>
-                              <td>{{ road.condition.sign }}</td>
+                              {% if road.condition.sign %}
+                                <td>{{ road.condition.sign }}</td>
+                              {% else %}
+                                <td> Engin </td>
+                              {% endif %}
                          </tr>
                           </tbody>
                         </table>
-                        <div class="col-xs-12">
+                        <div class="col-xs-12" data-toggle="modal" data-target="#{{road.name}}Modal">
                           {% with road.image_set.all|first as first_road_image %}
                               <img class="img-responsive" src="{{ first_road_image.url }}" alt="">
                           {% endwith %}
@@ -121,7 +125,52 @@
             </div>
 
           </div>
+          <!-- Start of Modal -->
+          <div class="modal fade" id="{{road.name}}Modal" role="dialog">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="container">
+                 <div id="{{ road.name }}myCarousel" class="carousel slide" data-ride="carousel">
+                   <!-- Indicators -->
+                   <ol class="carousel-indicators">
+                     {% for image in road.image_set.all  %}
+                       {% if forloop.first %}
+                       <li data-target="#{{ road.name }}myCarousel" data-slide-to={{ image.id }} class="active"></li>
+                       {% else %}
+                     <li data-target="#{{ road.name }}myCarousel" data-slide-to={{ image.id }}></li>
+                       {% endif %}
+                     {% endfor %}
+                   </ol>
 
+                   <!-- Wrapper for slides -->
+                   <div class="carousel-inner">
+                     {% for image in road.image_set.all  %}
+                       {% if forloop.first %}
+                       <div class="item active">
+                         <img src="{{ image.url }}" alt="" style="width:100%;">
+                       </div>
+                       {% else %}
+                       <div class="item ">
+                         <img src="{{ image.url }}" alt="" style="width:100%;">
+                       </div>
+                       {% endif %}
+                     {% endfor %}
+                  </div>
+
+                   <!-- Left and right controls -->
+                 <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                   <span class="glyphicon glyphicon-chevron-left"></span>
+                   <span class="sr-only">Previous</span>
+                 </a>
+                 <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                   <span class="glyphicon glyphicon-chevron-right"></span>
+                   <span class="sr-only">Next</span>
+                 </a>
+                 </div>
+               </div>
+             </div>
+            </div>
+          </div>
           {% endfor %}
           <div class="col-lg-4 col-md-4 col-md-offset-4 col-sm-8 col-sm-offset-2 col-xs-12">
             <div class="text-center">
@@ -130,62 +179,13 @@
             </div>
           </div>
 
+              </div>
+            </div>
+          </div>
 
-
-              <!-- start of weather widget -->
-            <!-- Large modal -->
-
-<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-  <div class="container">
-  <div id="myCarousel" class="carousel slide" data-ride="carousel">
-    <!-- Indicators -->
-    <ol class="carousel-indicators">
-      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-      <li data-target="#myCarousel" data-slide-to="1"></li>
-      <li data-target="#myCarousel" data-slide-to="2"></li>
-    </ol>
-
-    <!-- Wrapper for slides -->
-    <div class="carousel-inner">
-      <div class="item active">
-        <img src="http://www.vegagerdin.is/vgdata/vefmyndavelar/hellisheidi_1.jpg" alt="Los Angeles" style="width:100%;">
-      </div>
-
-      <div class="item">
-        <img src="http://www.vegagerdin.is/vgdata/vefmyndavelar/hellisheidi_2.jpg" alt="Chicago" style="width:100%;">
-      </div>
-
-      <div class="item">
-        <img src="http://www.vegagerdin.is/vgdata/vefmyndavelar/hellisheidi_3.jpg" alt="New york" style="width:100%;">
-      </div>
-    </div>
-
-    <!-- Left and right controls -->
-  <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-    <span class="glyphicon glyphicon-chevron-left"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="right carousel-control" href="#myCarousel" data-slide="next">
-    <span class="glyphicon glyphicon-chevron-right"></span>
-    <span class="sr-only">Next</span>
-  </a>
-  </div>
-</div>
-{#     	<img src="http://www.vegagerdin.is/vgdata/vefmyndavelar/hellisheidi_1.jpg" alt="" class="img-responsive"> #}
-    </div>
-  </div>
-
-</div>
               <!-- end of weather widget -->
             </div>
           </div>
-        </div>
-        <!-- /page content -->
-
-      </div>
-    </div>
 
     <!-- jQuery -->
     <script src="/static/vendors/jquery/dist/jquery.min.js"></script>
