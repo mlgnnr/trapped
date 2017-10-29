@@ -207,7 +207,13 @@ class Api():
         try:
             condition = road.condition
             condition.status = new_road['StuttAstand']
-            condition.sign = new_road['Skilti']
+            # condition.sign = new_road['Skilti']
+            condition.sign = 17
+            if condition.sign:
+                print("Sign: " + str(condition.sign))
+                condition.sign_string = Api.addSignLabel(condition.sign)
+            else:
+                print("No Sign")
             condition.last_update = datetime_object
             condition.save()
             print("New condition: " + condition.status)
@@ -216,6 +222,11 @@ class Api():
                                       status=new_road['StuttAstand'],
                                       last_update = datetime_object,
                                       sign=new_road['Skilti'])
+            if new_condition.sign:
+                print("Sign: " + str(new_condition.sign))
+                new_condition.sign_string = Api.addSignLabel(new_condition.sign)
+            else:
+                print("No Sign")
             new_condition.save()
             print("New Condition object added: " + new_condition.status)
 
@@ -260,6 +271,26 @@ class Api():
             station.last_updated = new_station['Dags']
             station.save()
             print("New weather: " + station.name)
+
+
+    def addSignLabel(sign):
+        return {
+            0: 'Engin',
+            1: 'Óveður',
+            2: 'Snjókoma',
+            3: 'Skafrenningur',
+            4: 'Stórhríð',
+            5: 'Þoka',
+            6: 'Unnið að mokstri',
+            7: 'Sandbylur',
+            8: 'Vegavinna',
+            9: 'Ósléttur vegur',
+            10: 'Óveður',
+            11: 'Fært fjallabílum',
+            16: 'Éljagangur',
+            17: 'Allur akstur bannaður',
+            18: 'Færð óþekkt'
+        }.get(sign, 'Engin')
 
     def addImagesThrengsli():
         road = Road.objects.get(name="Þrengsli")
