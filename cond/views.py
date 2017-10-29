@@ -22,10 +22,12 @@ def home(request):
 
 def index(request):
     road_list = []
-    roads = Road.objects.all().order_by('-name')
 
-    for road in roads:
-        road_list.append(road)
+    road_list.append(get_object_or_404(Road, name="Hellisheiði"))
+
+    # roads = Road.objects.all().order_by('-name')
+    # for road in roads:
+    #     road_list.append(road)
 
     road_list.reverse()
     # road_list = sorted(road_list, key=itemgetter('name'))
