@@ -206,7 +206,7 @@ class Api():
         road = Road.objects.get(id_butur=new_road['IdButur'])
         try:
             condition = road.condition
-            condition.status = new_road['StuttAstand']
+            condition.status = Api.getRoadTopCondition(new_road['AstandYfirbords'])
             condition.sign = new_road['Skilti']
             if condition.sign:
                 print("Sign: " + str(condition.sign))
@@ -217,8 +217,9 @@ class Api():
             condition.save()
             print("New condition: " + condition.status)
         except Condition.DoesNotExist:
+
             new_condition = Condition(road=road,
-                                      status=new_road['StuttAstand'],
+                                      status= Api.getRoadTopCondition(new_road['AstandYfirbords']),
                                       last_update = datetime_object,
                                       sign=new_road['Skilti'])
             if new_condition.sign:
@@ -254,7 +255,7 @@ class Api():
             print(road)
             print("Old condition: " + road.condition)
             # Add notications if CHANGES
-            road.condition = new_road['StuttAstand']
+            road.condition = Api.getRoadTopCondition(new_road['AstandYfirbords'])
             road.last_update = timezone.now()
             road.save()
             print("New condition: " + road.condition)
@@ -271,6 +272,28 @@ class Api():
             station.save()
             print("New weather: " + station.name)
 
+
+    def getRoadTopCondition(letter):
+        return {
+            '0': 'Óþekkt',
+            'A': 'Greiðfært',
+            'B': 'Hálkublettir',
+            'C': 'Hált',
+            'D': 'Flughált',
+            'E': 'Krap',
+            'F': 'Snjóþekja',
+            'G': 'Þæfingur',
+            'H': 'Þungfært',
+            'J': 'Ófært',
+            'K': 'Óveður',
+            'L': 'Lokað',
+            'M': 'Leyfður ásþungi 7 tonn',
+            'N': 'Leyfður ásþungi 5 tonn',
+            'O': 'Leyfður ásþungi 2 tonn',
+            'P': 'Vegavinna',
+            'S': 'Fært fjallabílum',
+            'U': 'Leyfður ásþungi 10 tonn',
+        }.get(letter, 'Óþekkt')
 
     def addSignLabel(sign):
         return {
