@@ -207,8 +207,7 @@ class Api():
         try:
             condition = road.condition
             condition.status = new_road['StuttAstand']
-            # condition.sign = new_road['Skilti']
-            condition.sign = 17
+            condition.sign = new_road['Skilti']
             if condition.sign:
                 print("Sign: " + str(condition.sign))
                 condition.sign_string = Api.addSignLabel(condition.sign)
