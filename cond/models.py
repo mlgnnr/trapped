@@ -16,6 +16,7 @@ class Condition (models.Model):
     status = models.CharField(blank=True, max_length=70)
     sign = models.IntegerField(blank=True, null=True)
     last_update = models.DateTimeField(blank=True, default=datetime.now)
+    sign_string = models.CharField(blank=True, max_length=70, null=True)
 
     def __str__(self):
         return self.road.name
