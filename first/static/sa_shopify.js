@@ -45,17 +45,17 @@ var loadScript = function(url, callback){
 
 /* This is my app's JavaScript */
 var myAppJavaScript = function($){
-  // $('#sa-shopify-button').append(
-  //   $('<button/>')
-  //     .attr("type", "button")
-  //     .addClass("btn btn-primary button")
-  //     .append("<span/>")
-  //       .text("Get Size Advice")
+  $('#sa-shopify-button').append(
+     $('<button/>')
+       .attr("type", "button")
+       .addClass("btn btn-primary button")
+       .append("<span/>")
+         .text("Get Size Advice")
   // );
   // $ in this scope references the jQuery object we'll use.
   // Don't use jQuery, or jQuery191, use the dollar sign.
   // Do this and do that, using $.
-  $('#sa-shopify-button').append('<p>Your app is using jQuery version '+$.fn.jquery+'</p>');
+  //$('#sa-shopify-button').append('<p>Your app is using jQuery version '+$.fn.jquery+'</p>');
 };
 
 /* If jQuery has not yet been loaded or if it has but it's too old for our needs,
